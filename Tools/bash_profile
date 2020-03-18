@@ -1,0 +1,89 @@
+# .bash_profile
+
+if [ -f ~/.bashrc ]; then
+  . ~/.bashrc
+fi
+
+
+#= [ function ]===================
+# display current branch name in Terminal
+function parse_git_branch() {
+  git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
+}
+
+function definition_ps1() {
+# export PS1="\h:\W \u\$ "     #mac default
+#_no current git branch name
+# export PS1="[\u@\h \[\e[0;32m\]\W\[\e[m\]]\\$ "
+
+# [Coloring of the Prompt]
+# *How to 1: \[ and \]
+#  __enter the Non-Printing Environment
+#  local enter_env=\[
+#  __exit from Non-Printing Environment
+#  local exit_env=\]
+#  local purple="${enter_env}[0;35m${exit_env}"
+# 
+# *How to 2: \e
+#  local purple=\e[0;35m
+
+  # __pattern 1
+  export PS1="[\u@\h \[\033[32m\]\W\[\033[00m\]]\[\033[35m\]\$(parse_git_branch)\[\033[00m\]\\$ "
+
+  # __pattern 2
+  # local reset='\e[0m'
+  # local green='\e[0;32m'
+  # local purple='\e[0;35m'
+  # export PS1="[\u@\h ${green}\W${reset}]${purple}\$(parse_git_branch)${reset}\\$ "
+  
+}
+
+# SSH connection for GitHub
+function git_ssh() {
+  local gitdir="${HOME}/connection/github"
+  GIT_SSH_COMMAND="ssh -i ${gitdir}/${1} -F /dev/null"
+  export GIT_SSH_COMMAND
+}
+#=================================
+
+
+definition_ps1
+
+
+#= [ SSH connection for GitHub ] =
+# --- [ github user name     ] ---
+git_ssh 'id_ed25519_github-user-name'
+#=================================
+
+
+#= [ compiler option ] ===========
+# LDFLAGS="${LDFLAGS} -L/usr/local/opt/openssl@1.1/lib"
+# LDFLAGS="${LDFLAGS} -L/usr/local/opt/readline/lib"
+# export LDFLAGS
+
+# CPPFLAGS="${CPPFLAGS} -I/usr/local/opt/openssl@1.1/include"
+# CPPFLAGS="${CPPFLAGS} -I/usr/local/opt/readline/include"
+# export CPPFLAGS
+#=================================
+
+#= [ Software Env. ] =============
+
+# [ pyenv ]
+export PYENV_ROOT=/usr/local/var/pyenv
+#   + auto complete by pyenv ]
+if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi
+
+
+# PKG_CONFIG_PATH="/usr/local/opt/openssl@1.1/lib/pkgconfig:${PKG_CONFIG_PATH}"
+# export PKG_CONFIG_PATH
+#=================================
+
+
+#= [ PATH ] ======================
+# PATH="${HOME}/local/bin:${PATH}"
+# PATH="/usr/local/opt/openssl@1.1/bin:${PATH}"
+PATH="/usr/local/texlive/2019/bin/x86_64-darwin:${PATH}"
+export PATH
+#=================================
+
+
