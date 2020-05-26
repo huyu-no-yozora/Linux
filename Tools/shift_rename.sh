@@ -4,7 +4,7 @@
 #  To rename files as "the number" shift from the start_num
 
 #==============================
-start_num=5
+
 prefix_name="[prefix name]"
 format="jpg"
 #==============================
@@ -27,12 +27,19 @@ function _confirmation_() {
   echo -n "Are you sure?[y/n]: "
   local res
   read res
-  if [ "$res" != "y" ]; then
-    echo -e "stopped\n"
-    exit
-  fi
+  if [ "$res" != "y" ]; then echo -e "stopped\n"; exit; fi
 }
 #==============================
+
+# Numeric Check
+echo -n "Enter the \"start number\": "
+read start_num
+if [[ "$start_num" =~ ^[0-9]+$ ]]; then 
+  :
+else
+  echo -e "it does NOT number\nstopped\n"; exit
+fi
+
 
 # Store Array
 files="$@"
