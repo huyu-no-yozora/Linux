@@ -4,10 +4,9 @@
 #  To rename files as "the number" shift from the start_num
 
 #==============================
-
-prefix_name="[prefix name]"
 format="jpg"
 #==============================
+# prefix_name="[prefix name]"
 # end_num=10
 #==============================
 
@@ -39,6 +38,10 @@ if [[ "$start_num" =~ ^[0-9]+$ ]]; then
 else
   echo -e "it does NOT number\nstopped\n"; exit
 fi
+
+# refix Name
+echo -n "Enter the \"prefix name\": "
+read prefix_name
 
 
 # Store Array
